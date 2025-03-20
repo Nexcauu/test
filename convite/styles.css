@@ -1,0 +1,976 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+:root {
+    --primary-color: #ff6b6b;
+    --secondary-color: #f7caca;
+    --tertiary-color: #f06292;
+    --background-color: #fff5f5;
+    --text-color: #333;
+    --correct-color: #4caf50;
+
+    /* Cores para o tema roxo escuro */
+    --dark-primary: #9c27b0;
+    --dark-secondary: #673ab7;
+    --dark-tertiary: #7b1fa2;
+    --dark-background: #300a40;
+    --dark-surface: #3f1155;
+    --dark-text: #ffffff;
+}
+
+html {
+    transition: all 0.5s ease;
+}
+
+html.light-theme {
+    --theme-primary: var(--primary-color);
+    --theme-secondary: var(--secondary-color);
+    --theme-tertiary: var(--tertiary-color);
+    --theme-background: var(--background-color);
+    --theme-text: var(--text-color);
+    --theme-surface: white;
+}
+
+html.dark-theme {
+    --theme-primary: var(--dark-primary);
+    --theme-secondary: var(--dark-secondary);
+    --theme-tertiary: var(--dark-tertiary);
+    --theme-background: var(--dark-background);
+    --theme-text: var(--dark-text);
+    --theme-surface: var(--dark-surface);
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--theme-background, var(--background-color));
+    background-image: linear-gradient(315deg, var(--theme-background, var(--background-color)) 0%, var(--theme-secondary, var(--secondary-color)) 74%);
+    transition: all 0.5s ease;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    background-color: var(--theme-surface, white);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    z-index: 10;
+}
+
+.container::before,
+.container::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: var(--theme-secondary, var(--secondary-color));
+    opacity: 0.4;
+    z-index: -1;
+    transition: all 0.5s ease;
+}
+
+.container::before {
+    top: -30px;
+    left: -30px;
+}
+
+.container::after {
+    bottom: -30px;
+    right: -30px;
+}
+
+.title, .message-title, .message-text, #question, .btn, .prev-btn, .next-btn, .theme-btn, .bubble-heart, .hidden-heart, .toggle-icon {
+    text-shadow: none;
+}
+
+.title {
+    color: var(--theme-tertiary, var(--tertiary-color));
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    transition: color 0.5s ease;
+}
+
+.dark-theme .title {
+    color: #ffffff;
+}
+
+.btn-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: 20px 0;
+    width: 100%;
+    position: relative;
+}
+
+.btn {
+    background-color: var(--theme-primary, var(--primary-color));
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transform: translateY(0);
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+    z-index: -1;
+}
+
+.btn:hover::before {
+    left: 100%;
+    animation: shine 1.5s;
+}
+
+@keyframes shine {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+.btn:hover:not([disabled]) {
+    background-color: var(--theme-tertiary, var(--tertiary-color));
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active:not([disabled]) {
+    transform: translateY(2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn.correct {
+    background-color: var(--correct-color);
+}
+
+.btn.wrong {
+    background-color: #f44336;
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.start-btn, .restart-btn {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 12px 30px;
+    margin-top: 1rem;
+    margin-inline: 5px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 10px;
+}
+
+/* Estilos para posicionar o botão de voltar alinhado com as respostas */
+.prev-btn {
+    position: absolute;
+    left: 15px;
+    top: 50px;
+    font-size: 1.8rem;
+    padding: 5px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    background-color: var(--theme-primary, var(--primary-color));
+}
+
+/* Ajuste para o container de perguntas ter posição relativa */
+#question-container {
+    position: relative;
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hide {
+    display: none;
+}
+
+#question {
+    color: var(--theme-text, var(--text-color));
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    transition: color 0.5s ease;
+}
+
+.message-title {
+    color: var(--theme-tertiary, var(--tertiary-color));
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    animation: pulse 1.5s infinite;
+    transition: color 0.5s ease;
+}
+
+.message-text {
+    color: var(--theme-text, var(--text-color));
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    transition: color 0.5s ease;
+}
+
+.heart {
+    position: relative;
+    width: 100px;
+    height: 90px;
+    margin: 2rem auto;
+}
+
+.heart:before,
+.heart:after {
+    position: absolute;
+    content: "";
+    left: 50px;
+    top: 0;
+    width: 50px;
+    height: 80px;
+    background: var(--theme-primary, var(--primary-color));
+    border-radius: 50px 50px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+    animation: beat 1.5s infinite alternate;
+    transition: background 0.5s ease;
+}
+
+.heart:after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+/* Botão de alternar tema */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+}
+
+.theme-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--theme-secondary, var(--secondary-color)), var(--theme-primary, var(--primary-color)));
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+.theme-btn:hover {
+    transform: scale(1.1);
+}
+
+.theme-btn.clicked {
+    animation: pulse-click 0.3s ease;
+}
+
+@keyframes pulse-click {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
+.toggle-icon {
+    font-size: 1.5rem;
+    transition: transform 0.5s ease;
+}
+
+.dark-theme .toggle-icon {
+    transform: rotate(360deg);
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes beat {
+    0% { transform: rotate(-45deg) scale(0.8); }
+    100% { transform: rotate(-45deg) scale(1.1); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@media (max-width: 500px) {
+    .container {
+        width: 95%;
+        padding: 1.5rem;
+    }
+    
+    .title {
+        font-size: 1.7rem;
+    }
+    
+    #question {
+        font-size: 1.3rem;
+    }
+    
+    .message-title {
+        font-size: 1.8rem;
+    }
+    
+    .message-text {
+        font-size: 1rem;
+    }
+
+    .theme-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .toggle-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* Estilos para as bolhas com corações */
+#bubbles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: float-up 15s linear forwards;
+    cursor: pointer;
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.bubble::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 20%;
+    width: 15%;
+    height: 15%;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+}
+
+.bubble::after {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: 30%;
+    width: 8%;
+    height: 8%;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+}
+
+.bubble-heart {
+    font-size: 1.2em;
+    animation: pulse-heart 2s infinite alternate;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+}
+
+@keyframes float-up {
+    0% {
+        transform: translateY(110vh) translateX(0);
+    }
+    100% {
+        transform: translateY(-20vh) translateX(var(--rand-x));
+    }
+}
+
+@keyframes pulse-heart {
+    0% {
+        transform: scale(0.8);
+    }
+    100% {
+        transform: scale(1.2);
+    }
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.4);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+/* Corações escondidos */
+.hidden-hearts {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+}
+
+.hidden-heart {
+    position: absolute;
+    font-size: 1.5rem;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.hidden-heart:hover {
+    animation: shake 0.5s infinite;
+}
+
+.hidden-heart.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.heart-1 {
+    top: 15%;
+    left: 8%;
+}
+
+.heart-2 {
+    top: 70%;
+    left: 12%;
+}
+
+.heart-3 {
+    top: 30%;
+    right: 10%;
+}
+
+.heart-4 {
+    top: 60%;
+    right: 15%;
+}
+
+.heart-5 {
+    top: 80%;
+    left: 50%;
+}
+
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.pop-effect {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 3;
+    animation: pop 0.5s forwards;
+}
+
+/* Corações escondidos adicionais */
+.heart-6 {
+    top: 25%;
+    right: 25%;
+}
+
+.heart-7 {
+    top: 45%;
+    left: 5%;
+}
+
+.heart-8 {
+    top: 10%;
+    left: 45%;
+}
+
+.heart-9 {
+    top: 85%;
+    right: 25%;
+}
+
+.heart-10 {
+    top: 5%;
+    right: 5%;
+}
+
+.heart-11 {
+    top: 75%;
+    left: 25%;
+}
+
+.heart-12 {
+    bottom: 15%;
+    right: 7%;
+}
+
+.heart-13 {
+    bottom: 25%;
+    left: 35%;
+}
+
+.heart-14 {
+    top: 40%;
+    right: 40%;
+}
+
+.heart-15 {
+    top: 60%;
+    left: 22%;
+}
+
+/* Posições para os novos corações escondidos */
+.heart-16 {
+    top: 18%;
+    left: 30%;
+}
+
+.heart-17 {
+    top: 55%;
+    right: 45%;
+}
+
+.heart-18 {
+    bottom: 15%;
+    left: 42%;
+}
+
+.heart-19 {
+    top: 35%;
+    left: 65%;
+}
+
+.heart-20 {
+    bottom: 35%;
+    right: 22%;
+}
+
+.heart-21 {
+    top: 70%;
+    right: 35%;
+}
+
+.heart-22 {
+    top: 20%;
+    right: 18%;
+}
+
+.heart-23 {
+    bottom: 25%;
+    left: 18%;
+}
+
+.heart-24 {
+    top: 50%;
+    right: 28%;
+}
+
+.heart-25 {
+    bottom: 45%;
+    left: 28%;
+}
+
+/* Decoração de fundo */
+.background-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(var(--theme-secondary, var(--secondary-color)) 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.3;
+}
+
+/* Container de coração para a mensagem final */
+.heart-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 2rem auto;
+}
+
+.heart {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 90px;
+}
+
+.heart-small {
+    width: 50px;
+    height: 45px;
+    top: 20%;
+    left: 25%;
+    animation-delay: 0.3s;
+}
+
+.heart-medium {
+    width: 70px;
+    height: 65px;
+    top: 30%;
+    left: 75%;
+    animation-delay: 0.6s;
+}
+
+.heart::before,
+.heart::after,
+.heart-small::before,
+.heart-small::after,
+.heart-medium::before,
+.heart-medium::after {
+    position: absolute;
+    content: "";
+    left: 50px;
+    top: 0;
+    width: 50px;
+    height: 80px;
+    background: var(--theme-primary, var(--primary-color));
+    border-radius: 50px 50px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+    animation: beat 1.5s infinite alternate;
+    transition: background 0.5s ease;
+}
+
+.heart-small::before,
+.heart-small::after {
+    left: 25px;
+    width: 25px;
+    height: 40px;
+}
+
+.heart-medium::before,
+.heart-medium::after {
+    left: 35px;
+    width: 35px;
+    height: 55px;
+}
+
+.heart::after,
+.heart-small::after,
+.heart-medium::after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+}
+
+/* Efeito de clique para todos os botões */
+.btn-click-effect {
+    animation: button-click 0.3s ease;
+    transform: scale(0.9) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5) inset !important;
+}
+
+@keyframes button-click {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.92); }
+    100% { transform: scale(1); }
+}
+
+.disabled-btn {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.disabled-btn:hover {
+    transform: none !important;
+    background-color: var(--theme-primary, var(--primary-color)) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Contorno para textos - mais nítido */
+.title, .btn, .prev-btn, .next-btn, .message-title, .theme-btn, .restart-btn, .start-btn {
+    text-shadow: none;
+    /* Melhorando a legibilidade */
+    letter-spacing: 0.5px;
+}
+
+/* Textos pretos no tema claro não recebem contorno */
+.light-theme #question,
+.light-theme .message-text {
+    text-shadow: none;
+}
+
+/* Textos no tema escuro - todos recebem contorno */
+.dark-theme #question,
+.dark-theme .message-text {
+    text-shadow: none;
+    /* Melhorando a legibilidade */
+    letter-spacing: 0.5px;
+}
+
+/* Contorno fino para emojis */
+.bubble-heart, .hidden-heart, .toggle-icon {
+    text-shadow: none;
+}
+
+/* Estilo específico para o botão de casa na tela final */
+.home-btn {
+    border-radius: 50% !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 20px auto !important;
+    line-height: 1 !important;
+    font-size: 22px !important;
+    overflow: visible !important;
+}
+
+/* Estilo para o container da imagem */
+.quiz-image {
+    width: 100%;
+    max-width: 300px;
+    height: 350px;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--theme-secondary, var(--secondary-color));
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo para o subtítulo */
+.subtitle {
+    color: var(--theme-tertiary, var(--tertiary-color));
+    text-align: center;
+    font-size: 1.4rem;
+    font-style: italic;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    transition: color 0.5s ease;
+}
+
+.dark-theme .subtitle {
+    color: #ffffff;
+}
+
+/* Estilo para o campo destinatário */
+.recipient {
+    color: var(--theme-tertiary, var(--tertiary-color));
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    transition: color 0.5s ease;
+}
+
+.dark-theme .recipient {
+    color: #ffffff;
+}
+
+/* Desativando efeitos de hover para o botão de casa */
+.home-btn:hover {
+    background-color: var(--theme-primary) !important;
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    border: none !important;
+    outline: none !important;
+}
+
+/* Evitando qualquer transformação ou efeito visual no hover */
+.home-btn, .home-btn:hover, .home-btn:active, .home-btn:focus {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+}
+
+/* Removendo completamente qualquer efeito visual do botão casa */
+.home-btn::before {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+    animation: none !important;
+}
+
+/* Animação específica para o botão de casa */
+@keyframes casa-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.home-btn {
+    animation: casa-pulse 2s infinite ease-in-out !important;
+    background-color: var(--theme-primary) !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Estilo para o container da imagem */
+.quiz-image {
+    width: 100%;
+    max-width: 300px;
+    height: 350px;
+    margin: 20px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--theme-secondary, var(--secondary-color));
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo para o subtítulo */
+.subtitle {
+    color: var(--theme-tertiary, var(--tertiary-color));
+    text-align: center;
+    font-size: 1.4rem;
+    font-style: italic;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    transition: color 0.5s ease;
+}
+
+.dark-theme .subtitle {
+    color: #ffffff;
+}
+
+/* Estilo para o campo destinatário */
+.recipient {
+    color: var(--theme-tertiary, var(--tertiary-color));
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    transition: color 0.5s ease;
+}
+
+.dark-theme .recipient {
+    color: #ffffff;
+}
+
+/* Desativando efeitos de hover para o botão de casa */
+.home-btn:hover {
+    background-color: var(--theme-primary) !important;
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    border: none !important;
+    outline: none !important;
+}
+
+/* Evitando qualquer transformação ou efeito visual no hover */
+.home-btn, .home-btn:hover, .home-btn:active, .home-btn:focus {
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    box-shadow: none !important;
+}
+
+/* Removendo completamente qualquer efeito visual do botão casa */
+.home-btn::before {
+    display: none !important;
+    content: none !important;
+    background: none !important;
+    animation: none !important;
+}
+
+.home-btn {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    background-color: var(--theme-primary) !important;
+    cursor: pointer !important;
+} 

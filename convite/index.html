@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br" class="light-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perguntas para Você</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+</head>
+<body>
+    <!-- Bolhas flutuantes com corações -->
+    <div id="bubbles-container"></div>
+    
+    <!-- Decoração fixa de fundo -->
+    <div class="background-decoration"></div>
+    
+    <!-- Corações escondidos -->
+    <div class="hidden-hearts">
+        <div class="hidden-heart heart-1">❤️</div>
+        <div class="hidden-heart heart-2">💗</div>
+        <div class="hidden-heart heart-3">💘</div>
+        <div class="hidden-heart heart-4">💝</div>
+        <div class="hidden-heart heart-5">💖</div>
+        <div class="hidden-heart heart-6">💓</div>
+        <div class="hidden-heart heart-7">💕</div>
+        <div class="hidden-heart heart-8">💞</div>
+        <div class="hidden-heart heart-9">💌</div>
+        <div class="hidden-heart heart-10">💟</div>
+        <div class="hidden-heart heart-11">💋</div>
+        <div class="hidden-heart heart-12">💔</div>
+        <div class="hidden-heart heart-13">💗</div>
+        <div class="hidden-heart heart-14">💖</div>
+        <div class="hidden-heart heart-15">💘</div>
+        <!-- Corações adicionais -->
+        <div class="hidden-heart heart-16">❣️</div>
+        <div class="hidden-heart heart-17">💘</div>
+        <div class="hidden-heart heart-18">💝</div>
+        <div class="hidden-heart heart-19">💞</div>
+        <div class="hidden-heart heart-20">💓</div>
+        <div class="hidden-heart heart-21">💗</div>
+        <div class="hidden-heart heart-22">💖</div>
+        <div class="hidden-heart heart-23">💕</div>
+        <div class="hidden-heart heart-24">❤️</div>
+        <div class="hidden-heart heart-25">💌</div>
+    </div>
+    
+    <div class="theme-toggle">
+        <button id="theme-btn" class="theme-btn" aria-label="Alternar tema">
+            <span class="toggle-icon">💞</span>
+        </button>
+    </div>
+    <div class="container">
+        <div id="quiz-container">
+            <h1 class="title">Com muito amor e carinho</h1>
+            <p class="recipient">Para: Adrielle</p>
+            <!-- Container para a foto, inicialmente vazio -->
+            <div id="quiz-image" class="quiz-image"></div>
+            <div id="question-container">
+                <h2 id="question"></h2>
+                <div id="answer-buttons" class="btn-grid">
+                </div>
+            </div>
+            <div class="controls">
+                <button id="prev-btn" class="prev-btn btn hide" aria-label="Anterior">←</button>
+                <button id="start-btn" class="start-btn btn">Começar</button>
+            </div>
+        </div>
+        <div id="message-container" class="hide">
+            <h1 class="message-title">Eu Te Amo!</h1>
+            <p class="message-text">Cada dia ao seu lado é uma nova razão para sorrir. Você é o melhor presente que a vida poderia me dar.</p>
+            <div class="heart-container">
+                <div class="heart"></div>
+                <div class="heart heart-small"></div>
+                <div class="heart heart-medium"></div>
+            </div>
+            <button id="restart-btn" class="restart-btn btn">Recomeçar</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
